@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ReportsModule } from './reports/reports.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
+import { User } from './users/dtos/user.entity';
 import { Report } from './reports/report.enitity';
 
 @Module({
