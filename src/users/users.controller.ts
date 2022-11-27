@@ -7,24 +7,46 @@ import {
   Param,
   Query,
   Delete,
-  UseInterceptors,
-  ClassSerializerInterceptor,
+  Session,
 } from '@nestjs/common';
 import { createUserDTO } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDTO } from './dtos/update-user.dto.';
+import { AuthService } from './auth.service';
 @Controller('auth')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authservice: AuthService,
+  ) {}
+
+  @Get('/whoami')
+  whoAmI(@Session() session: any) {
+    return this.usersService.findOne(session.userId);
+  }
 
   @Post('/signup')
-  createUser(@Body() body: createUserDTO) {
-    this.usersService.create(body.email, body.password);
+  async createUser(@Body() body: createUserDTO, @Session() session: any) {
+    const user: any = await this.authservice.signUp(body.email, body.password);
+    session.userId = user.id;
+    return user;
   }
-  @UseInterceptors(ClassSerializerInterceptor)
+
+  @Post('/signin')
+  async signIn(@Body() body: createUserDTO, @Session() session: any) {
+    const user: any = await this.authservice.signIn(body.email, body.password);
+    session.userId = user.id;
+    return user;
+  }
+
+  @Post('/signout')
+  async signout(@Body() body: createUserDTO, @Session() session: any) {
+    session.userId = null;
+  }
+
   @Get('/:id')
   findUser(@Param('id') id: string) {
-    this.usersService.findOne(parseInt(id));
+    return this.usersService.findOne(parseInt(id));
   }
 
   @Get('/:id')
