@@ -1,10 +1,10 @@
 import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
   AfterInsert,
   AfterRemove,
   AfterUpdate,
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -18,19 +18,18 @@ export class User {
   @Column()
   password: string;
 
-  /// hook allows to create function
-  @AfterInsert() // hook decoratedr
+  @AfterInsert()
   logInsert() {
-    console.log('inserted user', this.id);
+    console.log('Inserted User with id', this.id);
   }
 
   @AfterUpdate()
   logUpdate() {
-    console.log('updated user', this.id);
+    console.log('Updated User with id', this.id);
   }
 
   @AfterRemove()
   logRemove() {
-    console.log('removed user', this.id);
+    console.log('Removed User with id', this.id);
   }
 }
