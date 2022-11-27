@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { timingSafeEqual } from 'crypto';
 import { Repository } from 'typeorm';
 import { User } from './dtos/user.entity';
 @Injectable()
