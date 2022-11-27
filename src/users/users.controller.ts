@@ -8,21 +8,31 @@ import {
   Query,
   Delete,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import { createUserDTO } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDTO } from './dtos/update-user.dto.';
 import { AuthService } from './auth.service';
+import { User } from './dtos/user.entity';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { AuthGuard } from 'src/guards/auth.guards';
 @Controller('auth')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(
     private usersService: UsersService,
     private authservice: AuthService,
   ) {}
 
+  // @Get('/whoami')
+  // whoAmI(@Session() session: any) {
+  //   return this.usersService.findOne(session.userId);
+  // }
+
   @Get('/whoami')
-  whoAmI(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  whoAmI(@CurrentUser() user: User) {
+    return user;
   }
 
   @Post('/signup')
